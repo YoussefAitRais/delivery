@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DemandeDTO {
     private Long id;
-    private LocalDate dateDemande;
+    private LocalDate date;
     private String etat;
 
     private Long trajetId;

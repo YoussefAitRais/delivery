@@ -15,7 +15,7 @@ public class TrajetController {
 
     private final TrajetService trajetService;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<TrajetDTO> create(@RequestBody TrajetDTO dto) {
         return ResponseEntity.ok(trajetService.save(dto));
     }
