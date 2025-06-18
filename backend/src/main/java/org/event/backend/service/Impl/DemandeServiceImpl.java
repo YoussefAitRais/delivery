@@ -25,7 +25,6 @@ public class DemandeServiceImpl implements DemandeService {
 
     @Override
     public DemandeDTO save(DemandeDTO dto) {
-        // ✅ Vérification de l'existence des entités liées
         Colis colis = colisRepository.findById(dto.getColisId())
                 .orElseThrow(() -> new RuntimeException("Colis introuvable avec l'ID: " + dto.getColisId()));
         Trajet trajet = trajetRepository.findById(dto.getTrajetId())
@@ -33,7 +32,6 @@ public class DemandeServiceImpl implements DemandeService {
         Expediteur expediteur = expediteurRepository.findById(dto.getExpediteurId())
                 .orElseThrow(() -> new RuntimeException("Expéditeur introuvable avec l'ID: " + dto.getExpediteurId()));
 
-        // ✅ Création et assignation des champs
         Demande demande = new Demande();
         demande.setDate(LocalDate.now());
         demande.setStatus(Status.EN_ATTENTE);

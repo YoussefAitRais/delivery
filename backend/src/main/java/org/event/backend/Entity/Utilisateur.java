@@ -2,10 +2,9 @@ package org.event.backend.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Data // @Getter @Setter @ToString @EqualsAndHashCode
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Utilisateur {

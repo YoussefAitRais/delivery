@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -12,6 +11,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Expediteur extends Utilisateur {
 
+    private String telephone;
+
     @OneToMany(mappedBy = "expediteur", cascade = CascadeType.ALL)
     private List<Demande> demandes;
+
+
 }
+

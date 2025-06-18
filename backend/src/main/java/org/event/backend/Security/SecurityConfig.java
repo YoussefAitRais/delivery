@@ -22,6 +22,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/trajets/**").permitAll()
                         .requestMatchers("/api/colis/**").permitAll()
                         .requestMatchers("/api/demandes", "/api/demandes/**").permitAll()
+                        .requestMatchers("/api/expediteurs/**").permitAll()
                         .anyRequest().permitAll()
                 );
 
