@@ -1,0 +1,74 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard Conducteur</h1>
+
+  <!-- Section: Statistiques -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white shadow rounded p-4">
+      <h2 class="text-lg font-semibold text-gray-700">Demandes assignées</h2>
+      <p class="text-2xl font-bold text-blue-600">6</p>
+    </div>
+    <div class="bg-white shadow rounded p-4">
+      <h2 class="text-lg font-semibold text-gray-700">Trajets effectués</h2>
+      <p class="text-2xl font-bold text-green-600">4</p>
+    </div>
+    <div class="bg-white shadow rounded p-4">
+      <h2 class="text-lg font-semibold text-gray-700">Trajets en cours</h2>
+      <p class="text-2xl font-bold text-yellow-600">2</p>
+    </div>
+  </div>
+
+  <!-- Section: Liste des demandes -->
+  <div class="bg-white shadow rounded mb-6">
+    <div class="p-4 border-b">
+      <h2 class="text-xl font-semibold text-gray-800">Mes Demandes Assignées</h2>
+    </div>
+    <div class="p-4">
+      <table class="w-full table-auto text-left">
+        <thead>
+        <tr class="text-gray-600 border-b">
+          <th class="py-2">ID</th>
+          <th class="py-2">Colis</th>
+          <th class="py-2">Expéditeur</th>
+          <th class="py-2">Date</th>
+          <th class="py-2">État</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="border-b hover:bg-gray-50">
+          <td class="py-2">1</td>
+          <td class="py-2">Colis A</td>
+          <td class="py-2">Ali</td>
+          <td class="py-2">2025-06-15</td>
+          <td class="py-2 text-green-600 font-semibold">Acceptée</td>
+        </tr>
+        <tr class="border-b hover:bg-gray-50">
+          <td class="py-2">2</td>
+          <td class="py-2">Colis B</td>
+          <td class="py-2">Fatima</td>
+          <td class="py-2">2025-06-14</td>
+          <td class="py-2 text-yellow-600 font-semibold">En cours</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section: Liste des trajets -->
+  <div class="bg-white shadow rounded">
+    <div class="p-4 border-b">
+      <h2 class="text-xl font-semibold text-gray-800">Mes Trajets</h2>
+    </div>
+    <div class="p-4">
+      <ul class="space-y-3">
+        <li class="bg-gray-50 p-3 rounded shadow-sm flex justify-between items-center">
+          <span>Trajet de Rabat à Casablanca</span>
+          <span class="text-sm text-gray-500">2025-06-13</span>
+        </li>
+        <li class="bg-gray-50 p-3 rounded shadow-sm flex justify-between items-center">
+          <span>Trajet de Fès à Meknès</span>
+          <span class="text-sm text-gray-500">2025-06-10</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
