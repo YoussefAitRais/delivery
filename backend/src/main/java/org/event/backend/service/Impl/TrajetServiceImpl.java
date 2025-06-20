@@ -1,77 +1,43 @@
 package org.event.backend.service.Impl;
 
 import lombok.RequiredArgsConstructor;
-import org.event.backend.Entity.Trajet;
 import org.event.backend.dto.TrajetDTO;
-import org.event.backend.repository.TrajetRepository;
 import org.event.backend.service.TrajetService;
-import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Service
+@RestController
+@RequestMapping("/api/trajets")
 @RequiredArgsConstructor
-public class TrajetServiceImpl implements TrajetService {
+public class TrajetController {
 
-    private final TrajetRepository trajetRepository;
+    private final TrajetService trajetService;
 
-    @Override
-    public TrajetDTO save(TrajetDTO dto) {
-        Trajet trajet = new Trajet();
-        trajet.setLieuDepart(dto.getLieuDepart());
-        trajet.setDestinationFinale(dto.getDestinationFinal());
-        trajet.setEtapesIntermediaires(dto.getEtapesIntermediaires());
-        trajet.setDemensionsMaximalesAcceptees(dto.getDemensionsMaximalesAcceptees());
-        trajet.setTypeMarchandise(dto.getTypeMarchandise());
-        trajet.setCapaciteDisponible(dto.getCapaciteDisponible());
-
-        return convertToDto(trajetRepository.save(trajet));
-    }
-
-
-    @Override
+    @GetMapping
     public List<TrajetDTO> getAll() {
-        return trajetRepository.findAll()
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        return trajetService.getAll();
     }
 
-    @Override
-    public TrajetDTO getById(Long id) {
-        Trajet trajet = trajetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Trajet non trouvé"));
-        return convertToDto(trajet);
+    @GetMapping("/demandes")
+    public List<TrajetDTO> getDemandes() {
+        return trajetService.getDemandes();
     }
 
-    @Override
-    public TrajetDTO update(Long id, TrajetDTO dto) {
-        Trajet trajet = trajetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Trajet non trouvé"));
-
-        trajet.setLieuDepart(dto.getLieuDepart());
-        trajet.setDestinationFinale(dto.getDestinationFinal());
-        trajet.setEtapesIntermediaires(dto.getEtapesIntermediaires());
-        trajet.setDemensionsMaximalesAcceptees(dto.getDemensionsMaximalesAcceptees());
-        trajet.setTypeMarchandise(dto.getTypeMarchandise());
-        trajet.setCapaciteDisponible(dto.getCapaciteDisponible());
-
-        return convertToDto(trajetRepository.save(trajet));
+    @GetMapping("/{id}")
+    public TrajetDTO getById(@PathVariable Long id) {
+        return trajetService.getById(id);
     }
 
-
-    @Override
-    public void delete(Long id) {
-        trajetRepository.deleteById(id);
+    @PutMapping("/{id}")
+    public TrajetDTO update(@PathVariable Long id, @RequestBody TrajetDTO dto) {
+        return trajetService.update(id, dto);
     }
 
-    private TrajetDTO convertToDto(Trajet t) {
-        return new TrajetDTO(
-                t.getId(), t.getLieuDepart(), t.getDestinationFinale(),
-                t.getEtapesIntermediaires(), t.getDemensionsMaximalesAcceptees(),
-                t.getTypeMarchandise(), t.getCapaciteDisponible()
-        );
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        trajetService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
-

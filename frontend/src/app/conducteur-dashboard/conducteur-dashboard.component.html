@@ -1,23 +1,37 @@
+<!-- conducteur-dashboard.component.html -->
 <div class="p-6 bg-gray-100 min-h-screen">
   <h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard Conducteur</h1>
 
-  <!-- Section: Statistiques -->
+  <!-- Statistiques dynamiques -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
     <div class="bg-white shadow rounded p-4">
       <h2 class="text-lg font-semibold text-gray-700">Demandes assignées</h2>
-      <p class="text-2xl font-bold text-blue-600">6</p>
+      <p class="text-2xl font-bold text-blue-600">{{ demandes.length }}</p>
     </div>
     <div class="bg-white shadow rounded p-4">
       <h2 class="text-lg font-semibold text-gray-700">Trajets effectués</h2>
-      <p class="text-2xl font-bold text-green-600">4</p>
+      <p class="text-2xl font-bold text-green-600">{{ trajets.length }}</p>
     </div>
     <div class="bg-white shadow rounded p-4">
       <h2 class="text-lg font-semibold text-gray-700">Trajets en cours</h2>
-      <p class="text-2xl font-bold text-yellow-600">2</p>
+      <p class="text-2xl font-bold text-yellow-600">{{ etatEncoursCount }}</p>
     </div>
   </div>
 
-  <!-- Section: Liste des demandes -->
+  <!-- Ajouter Trajet -->
+  <div class="bg-white shadow rounded p-4 mb-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">➕ Ajouter un Nouveau Trajet</h2>
+    <form (ngSubmit)="isEdit ? updateTrajet() : addTrajet()" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <input [(ngModel)]="newTrajet.depart" name="depart" required placeholder="Départ" class="border rounded p-2" />
+      <input [(ngModel)]="newTrajet.destination" name="destination" required placeholder="Destination" class="border rounded p-2" />
+      <input [(ngModel)]="newTrajet.date" name="date" type="date" required class="border rounded p-2" />
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded col-span-1 md:col-span-3 hover:bg-blue-700">
+        {{ isEdit ? 'Modifier Trajet' : 'Ajouter Trajet' }}
+      </button>
+    </form>
+  </div>
+
+  <!-- Liste des demandes -->
   <div class="bg-white shadow rounded mb-6">
     <div class="p-4 border-b">
       <h2 class="text-xl font-semibold text-gray-800">Mes Demandes Assignées</h2>
@@ -34,39 +48,35 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="border-b hover:bg-gray-50">
-          <td class="py-2">1</td>
-          <td class="py-2">Colis A</td>
-          <td class="py-2">Ali</td>
-          <td class="py-2">2025-06-15</td>
-          <td class="py-2 text-green-600 font-semibold">Acceptée</td>
-        </tr>
-        <tr class="border-b hover:bg-gray-50">
-          <td class="py-2">2</td>
-          <td class="py-2">Colis B</td>
-          <td class="py-2">Fatima</td>
-          <td class="py-2">2025-06-14</td>
-          <td class="py-2 text-yellow-600 font-semibold">En cours</td>
+        <tr *ngFor="let d of demandes" class="border-b hover:bg-gray-50">
+          <td class="py-2">{{ d.id }}</td>
+          <td class="py-2">{{ d.colis?.libelle || '-' }}</td>
+          <td class="py-2">{{ d.expediteur?.nom || '-' }}</td>
+          <td class="py-2">{{ d.date || '-' }}</td>
+          <td class="py-2 text-green-600 font-semibold">{{ d.statut }}</td>
         </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- Section: Liste des trajets -->
+  <!-- Liste des trajets -->
   <div class="bg-white shadow rounded">
     <div class="p-4 border-b">
       <h2 class="text-xl font-semibold text-gray-800">Mes Trajets</h2>
     </div>
     <div class="p-4">
       <ul class="space-y-3">
-        <li class="bg-gray-50 p-3 rounded shadow-sm flex justify-between items-center">
-          <span>Trajet de Rabat à Casablanca</span>
-          <span class="text-sm text-gray-500">2025-06-13</span>
-        </li>
-        <li class="bg-gray-50 p-3 rounded shadow-sm flex justify-between items-center">
-          <span>Trajet de Fès à Meknès</span>
-          <span class="text-sm text-gray-500">2025-06-10</span>
+        <li *ngFor="let trajet of trajets" class="bg-gray-50 p-3 rounded shadow-sm flex justify-between items-center">
+          <div>
+            <span class="font-medium">Trajet de {{ trajet.depart }} à {{ trajet.destination }}</span><br />
+            <span class="text-sm text-gray-500">{{ trajet.date }}</span>
+          </div>
+          <div class="space-x-2">
+            <button (click)="editTrajet(trajet)" class="text-yellow-600 hover:underline">✏️ Modifier</button>
+            <button (click)="deleteTrajet(trajet.id)" class="text-red-600 hover:underline">🗑️ Supprimer</button>
+
+          </div>
         </li>
       </ul>
     </div>
