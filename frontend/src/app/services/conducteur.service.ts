@@ -1,32 +1,32 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {Injectable} from "@angular/core";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConducteurService {
-  private baseUrl = 'http://localhost:8080/api/conducteurs';
+  private baseUrl = 'http://localhost:8080/api/trajets';
 
   constructor(private http: HttpClient) {}
 
   getTrajetsForConducteur(conducteurId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/${conducteurId}/trajets`);
+    return this.http.get<any[]>(`${this.baseUrl}/conducteur/${conducteurId}`);
   }
 
   createTrajetForConducteur(conducteurId: number, trajet: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${conducteurId}/trajets`, trajet);
+    return this.http.post(`${this.baseUrl}/conducteur/${conducteurId}`, trajet);
   }
 
   updateTrajet(id: number, trajet: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/trajets/${id}`, trajet);
+    return this.http.put(`${this.baseUrl}/${id}`, trajet);
   }
 
   deleteTrajet(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/trajets/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
   getAllDemandes(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/demandes`); // ✅ هذا خصو يكون موجد في الباك
+    return this.http.get<any[]>(`${this.baseUrl}/demandes`);
   }
 }

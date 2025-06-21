@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ConducteurService } from '../services/conducteur.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {HttpClient} from "@angular/common/http";
+import {RouterModule} from "@angular/router";
 
 @Component({
   selector: 'app-conducteur-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule , RouterModule],
   templateUrl: './conducteur-dashboard.component.html',
 })
 export class ConducteurDashboardComponent implements OnInit {
@@ -17,7 +19,6 @@ export class ConducteurDashboardComponent implements OnInit {
 
   isEdit = false;
 
-  // ✅ نموذج البيانات
   newTrajet = {
     id: null,
     depart: '',
