@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ConducteurService } from '../services/conducteur.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {HttpClient} from "@angular/common/http";
-import {RouterModule} from "@angular/router";
+import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-conducteur-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule , RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './conducteur-dashboard.component.html',
 })
 export class ConducteurDashboardComponent implements OnInit {
@@ -24,9 +24,14 @@ export class ConducteurDashboardComponent implements OnInit {
     depart: '',
     destination: '',
     date: '',
+    etapesIntermediaires: '',
+    demensionsMaximalesAcceptees: '',
+    typeMarchandise: '',
+    capaciteDisponible: 0,
   };
 
-  constructor(private conducteurService: ConducteurService) {}
+  constructor(private conducteurService: ConducteurService) {
+  }
 
   ngOnInit(): void {
     this.loadTrajets();
@@ -70,6 +75,10 @@ export class ConducteurDashboardComponent implements OnInit {
       depart: trajet.depart,
       destination: trajet.destination,
       date: trajet.date,
+      etapesIntermediaires: trajet.etapesIntermediaires || '',
+      demensionsMaximalesAcceptees: trajet.demensionsMaximalesAcceptees || '',
+      typeMarchandise: trajet.typeMarchandise || '',
+      capaciteDisponible: trajet.capaciteDisponible || 0,
     };
     this.isEdit = true;
   }
@@ -92,7 +101,16 @@ export class ConducteurDashboardComponent implements OnInit {
   }
 
   resetForm() {
-    this.newTrajet = { id: null, depart: '', destination: '', date: '' };
+    this.newTrajet = {
+      id: null,
+      depart: '',
+      destination: '',
+      date: '',
+      etapesIntermediaires: '',
+      demensionsMaximalesAcceptees: '',
+      typeMarchandise: '',
+      capaciteDisponible: 0,
+    };
     this.isEdit = false;
   }
 }

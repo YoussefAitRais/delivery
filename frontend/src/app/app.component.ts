@@ -7,12 +7,13 @@ import {ExpediteurDashboardComponent} from "./expediteur-dashboard/expediteur-da
 import {ConducteurDashboardComponent} from "./conducteur-dashboard/conducteur-dashboard.component";
 import {NavbarComponent} from "./navbar/navbar.component";
 import {HomeComponent} from "./home/home.component";
+import {DashboardHomeComponent} from "./dashboard-home/dashboard-home.component";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LoginComponent, LoginComponent, RegisterComponent, DashboardComponent, ExpediteurDashboardComponent, ConducteurDashboardComponent, NavbarComponent, HomeComponent],
+  imports: [RouterOutlet, LoginComponent, LoginComponent, RegisterComponent, DashboardComponent, ExpediteurDashboardComponent, ConducteurDashboardComponent, NavbarComponent, HomeComponent, DashboardHomeComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

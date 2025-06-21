@@ -51,7 +51,7 @@
         <tr *ngFor="let d of demandes" class="border-b hover:bg-gray-50">
           <td class="py-2">{{ d.id }}</td>
           <td class="py-2">{{ d.colis?.libelle || '-' }}</td>
-          <td class="py-2">{{ d.expediteur?.nom || '-' }}</td>
+          <td class="py-2">{{ d.expediteurNom }} {{ d.expediteurPrenom }}</td>
           <td class="py-2">{{ d.date || '-' }}</td>
           <td class="py-2 text-green-600 font-semibold">{{ d.statut }}</td>
         </tr>
