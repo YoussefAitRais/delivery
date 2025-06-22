@@ -1,64 +1,126 @@
 <div class="p-6 bg-gray-100 min-h-screen">
-  <!-- Title -->
-  <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard Expéditeur</h1>
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard Expéditeur</h1>
 
-  <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <!-- Colis -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-gray-700 text-lg font-semibold mb-2">📦 Colis envoyés</h2>
-      <p class="text-4xl text-blue-600 font-bold">12</p>
+  <!-- Actions -->
+  <div class="mb-6 flex justify-end gap-4">
+    <button (click)="openColisForm()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">➕ Ajouter Colis</button>
+    <button (click)="openDemandeForm()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">➕ Nouvelle Demande + Colis</button>
+  </div>
+
+  <!-- Liste Colis -->
+  <div class="bg-white shadow rounded mb-6">
+    <div class="p-4 border-b">
+      <h2 class="text-xl font-semibold text-gray-800">📦 Mes Colis</h2>
     </div>
-
-    <!-- Demandes -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-gray-700 text-lg font-semibold mb-2">📑 Total demandes</h2>
-      <p class="text-4xl text-green-600 font-bold">8</p>
-    </div>
-
-    <!-- Statut -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-gray-700 text-lg font-semibold mb-2">⚖️ Status demandes</h2>
-      <p class="text-xl text-yellow-600">✅ 4 Acceptées / ❌ 2 Refusées</p>
+    <div class="p-4">
+      <table class="w-full table-auto text-left">
+        <thead>
+        <tr class="text-gray-600 border-b">
+          <th class="py-2">Destination</th>
+          <th class="py-2">Type</th>
+          <th class="py-2">Poids</th>
+          <th class="py-2">Dimensions</th>
+          <th class="py-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let colis of colisList" class="border-b hover:bg-gray-50">
+          <td class="py-2">{{ colis.destination }}</td>
+          <td class="py-2">{{ colis.typeColis }}</td>
+          <td class="py-2">{{ colis.poids }} kg</td>
+          <td class="py-2">{{ colis.dimensions }}</td>
+          <td class="py-2">
+            <button (click)="deleteColis(colis.id)" class="text-red-600 hover:underline">🗑️ Supprimer</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- Liste des colis -->
-  <div class="bg-white p-6 rounded-lg shadow-md mb-8">
-    <h3 class="text-lg font-semibold text-gray-700 mb-4">📦 Mes Colis</h3>
-    <ul class="divide-y divide-gray-200">
-      <li class="py-2">Colis 1 - Destination: Casablanca</li>
-      <li class="py-2">Colis 2 - Destination: Rabat</li>
-      <li class="py-2">Colis 3 - Destination: Fès</li>
-    </ul>
+  <!-- Liste Demandes -->
+  <div class="bg-white shadow rounded">
+    <div class="p-4 border-b">
+      <h2 class="text-xl font-semibold text-gray-800">📮 Mes Demandes</h2>
+    </div>
+    <div class="p-4">
+      <table class="w-full table-auto text-left">
+        <thead>
+        <tr class="text-gray-600 border-b">
+          <th class="py-2">Trajet ID</th>
+          <th class="py-2">Colis</th>
+          <th class="py-2">Date</th>
+          <th class="py-2">État</th>
+          <th class="py-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let d of demandesList" class="border-b hover:bg-gray-50">
+          <td class="py-2">{{ d.trajetId }}</td>
+          <td class="py-2">{{ d.colisId }}</td>
+          <td class="py-2">{{ d.date }}</td>
+          <td class="py-2" [ngClass]="getStatusColor(d.etat)">
+            {{ d.etat }}
+          </td>
+          <td class="py-2">
+            <button (click)="deleteDemande(d.id)" class="text-red-600 hover:underline">🗑️ Supprimer</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- Liste des demandes -->
-  <div class="bg-white p-6 rounded-lg shadow-md mb-8">
-    <h3 class="text-lg font-semibold text-gray-700 mb-4">📑 Mes Demandes</h3>
-    <ul class="divide-y divide-gray-200">
-      <li class="py-2 flex justify-between">
-        <span>Demande #1</span>
-        <span class="text-green-600 font-medium">Acceptée</span>
-      </li>
-      <li class="py-2 flex justify-between">
-        <span>Demande #2</span>
-        <span class="text-red-500 font-medium">Refusée</span>
-      </li>
-      <li class="py-2 flex justify-between">
-        <span>Demande #3</span>
-        <span class="text-yellow-500 font-medium">En attente</span>
-      </li>
-    </ul>
+  <!-- Modal Demande + Colis -->
+  <div *ngIf="showDemandeForm" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg w-full max-w-lg space-y-4">
+      <h2 class="text-2xl font-bold text-gray-800 text-center">🆕 Nouvelle Demande + Colis</h2>
+
+      <div class="grid grid-cols-1 gap-4">
+        <input [(ngModel)]="newDemande.trajetId" type="number" placeholder="🛣️ Trajet ID" class="input w-full" />
+        <input [(ngModel)]="newColis.destination" placeholder="📍 Destination" class="input w-full" />
+        <input [(ngModel)]="newColis.dimensions" placeholder="📐 Dimensions" class="input w-full" />
+        <input [(ngModel)]="newColis.typeColis" placeholder="📦 Type" class="input w-full" />
+        <input [(ngModel)]="newColis.poids" type="number" placeholder="⚖️ Poids (kg)" class="input w-full" />
+
+        <div class="grid grid-cols-3 gap-3">
+          <input [(ngModel)]="newColis.longueur" type="number" placeholder="📏 Longueur" class="input w-full" />
+          <input [(ngModel)]="newColis.largeur" type="number" placeholder="📏 Largeur" class="input w-full" />
+          <input [(ngModel)]="newColis.hauteur" type="number" placeholder="📏 Hauteur" class="input w-full" />
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-4">
+        <button (click)="saveDemandeWithColis()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+          💾 Enregistrer
+        </button>
+        <button (click)="closeDemandeForm()" class="text-gray-600 hover:underline">Annuler</button>
+      </div>
+    </div>
   </div>
 
-  <!-- Liste dynamique des Expéditeurs -->
-  <div class="bg-white p-6 rounded-lg shadow-md">
-    <h3 class="text-lg font-semibold text-gray-700 mb-4">👤 Tous les Expéditeurs</h3>
-    <ul class="divide-y divide-gray-200">
-      <li *ngFor="let ex of expediteurs" class="py-2">
-        {{ ex.nom }} {{ ex.prenom }} - {{ ex.email }}
-      </li>
-    </ul>
+  <!-- Modal Colis -->
+  <div *ngIf="showColisForm" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
+      <h2 class="text-2xl font-bold text-gray-800 text-center">➕ Ajouter un Colis</h2>
+
+      <div class="grid grid-cols-1 gap-3">
+        <input [(ngModel)]="newColis.destination" placeholder="📍 Destination" class="input w-full" />
+        <input [(ngModel)]="newColis.dimensions" placeholder="📐 Dimensions" class="input w-full" />
+        <input [(ngModel)]="newColis.typeColis" placeholder="📦 Type" class="input w-full" />
+        <input [(ngModel)]="newColis.poids" type="number" placeholder="⚖️ Poids (kg)" class="input w-full" />
+
+        <div class="grid grid-cols-3 gap-3">
+          <input [(ngModel)]="newColis.longueur" type="number" placeholder="📏 Longueur" class="input w-full" />
+          <input [(ngModel)]="newColis.largeur" type="number" placeholder="📏 Largeur" class="input w-full" />
+          <input [(ngModel)]="newColis.hauteur" type="number" placeholder="📏 Hauteur" class="input w-full" />
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-4">
+        <button (click)="saveColis()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">💾 Enregistrer</button>
+        <button (click)="closeColisForm()" class="text-gray-600 hover:underline">Annuler</button>
+      </div>
+    </div>
   </div>
 </div>

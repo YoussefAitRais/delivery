@@ -12,7 +12,16 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'dashboard', component: DashboardComponent},
-  {path: 'expediteur-dashboard', component: ExpediteurDashboardComponent},
-  {path: 'conducteur-dashboard', component: ConducteurDashboardComponent},
+  {
+    path: 'expediteur-dashboard',
+    loadComponent: () => import('./expediteur-dashboard/expediteur-dashboard.component')
+      .then(m => m.ExpediteurDashboardComponent)
+  },
+
+  {
+    path: 'conducteur-dashboard',
+    loadComponent: () => import('./conducteur-dashboard/conducteur-dashboard.component')
+      .then(m => m.ConducteurDashboardComponent)
+  }
 
 ];
