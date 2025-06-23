@@ -1,18 +1,22 @@
 <div class="p-6 bg-gray-100 min-h-screen">
-  <h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard Expéditeur</h1>
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">📤 Dashboard Expéditeur</h1>
 
-  <!-- Actions -->
+  <!-- 🔘 Actions -->
   <div class="mb-6 flex justify-end gap-4">
-    <button (click)="openColisForm()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">➕ Ajouter Colis</button>
-    <button (click)="openDemandeForm()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">➕ Nouvelle Demande + Colis</button>
+    <button (click)="openColisForm()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      ➕ Ajouter Colis
+    </button>
+    <button (click)="openDemandeForm()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+      ➕ Nouvelle Demande + Colis
+    </button>
   </div>
 
-  <!-- Liste Colis -->
+  <!-- 📦 Liste Colis -->
   <div class="bg-white shadow rounded mb-6">
     <div class="p-4 border-b">
       <h2 class="text-xl font-semibold text-gray-800">📦 Mes Colis</h2>
     </div>
-    <div class="p-4">
+    <div class="p-4 overflow-auto">
       <table class="w-full table-auto text-left">
         <thead>
         <tr class="text-gray-600 border-b">
@@ -38,17 +42,19 @@
     </div>
   </div>
 
-  <!-- Liste Demandes -->
+  <!-- 📮 Liste Demandes -->
   <div class="bg-white shadow rounded">
     <div class="p-4 border-b">
       <h2 class="text-xl font-semibold text-gray-800">📮 Mes Demandes</h2>
     </div>
-    <div class="p-4">
+    <div class="p-4 overflow-auto">
       <table class="w-full table-auto text-left">
         <thead>
         <tr class="text-gray-600 border-b">
           <th class="py-2">Trajet ID</th>
-          <th class="py-2">Colis</th>
+          <th class="py-2">Destination</th>
+          <th class="py-2">Type</th>
+          <th class="py-2">Poids</th>
           <th class="py-2">Date</th>
           <th class="py-2">État</th>
           <th class="py-2">Actions</th>
@@ -57,7 +63,9 @@
         <tbody>
         <tr *ngFor="let d of demandesList" class="border-b hover:bg-gray-50">
           <td class="py-2">{{ d.trajetId }}</td>
-          <td class="py-2">{{ d.colisId }}</td>
+          <td class="py-2">{{ d.colis?.destination || '-' }}</td>
+          <td class="py-2">{{ d.colis?.typeColis || '-' }}</td>
+          <td class="py-2">{{ d.colis?.poids || '-' }} kg</td>
           <td class="py-2">{{ d.date }}</td>
           <td class="py-2" [ngClass]="getStatusColor(d.etat)">
             {{ d.etat }}
@@ -71,7 +79,7 @@
     </div>
   </div>
 
-  <!-- Modal Demande + Colis -->
+  <!-- 🔘 Modal Demande + Colis -->
   <div *ngIf="showDemandeForm" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
     <div class="bg-white p-6 rounded shadow-lg w-full max-w-lg space-y-4">
       <h2 class="text-2xl font-bold text-gray-800 text-center">🆕 Nouvelle Demande + Colis</h2>
@@ -82,7 +90,6 @@
         <input [(ngModel)]="newColis.dimensions" placeholder="📐 Dimensions" class="input w-full" />
         <input [(ngModel)]="newColis.typeColis" placeholder="📦 Type" class="input w-full" />
         <input [(ngModel)]="newColis.poids" type="number" placeholder="⚖️ Poids (kg)" class="input w-full" />
-
         <div class="grid grid-cols-3 gap-3">
           <input [(ngModel)]="newColis.longueur" type="number" placeholder="📏 Longueur" class="input w-full" />
           <input [(ngModel)]="newColis.largeur" type="number" placeholder="📏 Largeur" class="input w-full" />
@@ -99,7 +106,7 @@
     </div>
   </div>
 
-  <!-- Modal Colis -->
+  <!-- 🔘 Modal Colis Only -->
   <div *ngIf="showColisForm" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
     <div class="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
       <h2 class="text-2xl font-bold text-gray-800 text-center">➕ Ajouter un Colis</h2>
@@ -109,7 +116,6 @@
         <input [(ngModel)]="newColis.dimensions" placeholder="📐 Dimensions" class="input w-full" />
         <input [(ngModel)]="newColis.typeColis" placeholder="📦 Type" class="input w-full" />
         <input [(ngModel)]="newColis.poids" type="number" placeholder="⚖️ Poids (kg)" class="input w-full" />
-
         <div class="grid grid-cols-3 gap-3">
           <input [(ngModel)]="newColis.longueur" type="number" placeholder="📏 Longueur" class="input w-full" />
           <input [(ngModel)]="newColis.largeur" type="number" placeholder="📏 Largeur" class="input w-full" />

@@ -17,35 +17,8 @@ export class ExpediteurDashboardComponent implements OnInit {
   showColisForm = false;
   showDemandeForm = false;
 
-  newColis: {
-    longueur: number;
-    expediteurId: number;
-    largeur: number;
-    poids: number;
-    destination: string;
-    typeColis: string;
-    hauteur: number;
-    dimensions: string;
-  } = {
-    destination: '',
-    dimensions: '',
-    typeColis: '',
-    poids: 0,
-    longueur: 0,
-    largeur: 0,
-    hauteur: 0,
-    expediteurId: 1
-  };
-
-
-
-  newDemande = {
-    status: '',
-    date: '',
-    colisId: 0,
-    trajetId: 0,
-    expediteurId: 1
-  };
+  newColis: any = this.initColis();
+  newDemande: any = this.initDemande();
 
   constructor(
     private colisService: ColisService,
@@ -53,15 +26,17 @@ export class ExpediteurDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.fetchAll();
+  }
+
+  fetchAll() {
     this.colisService.getByExpediteur(1).subscribe(data => this.colisList = data);
     this.demandeService.getByExpediteur(1).subscribe(data => this.demandesList = data);
   }
 
-  // Colis
-  openColisForm() { this.showColisForm = true; }
-  closeColisForm() {
-    this.showColisForm = false;
-    this.newColis = {
+  // Helpers init
+  initColis() {
+    return {
       destination: '',
       dimensions: '',
       typeColis: '',
@@ -71,65 +46,37 @@ export class ExpediteurDashboardComponent implements OnInit {
       hauteur: 0,
       expediteurId: 1
     };
-
   }
 
-  saveColis() {
-    this.newColis.expediteurId = 1;
+  initDemande() {
+    return {
+      trajetId: 0,
+      expediteurId: 1,
+      status: '',
+      date: '',
+      colisId: 0
+    };
+  }
 
+  // 🔁 FORM Toggle
+  openColisForm() { this.showColisForm = true; }
+  closeColisForm() { this.showColisForm = false; this.newColis = this.initColis(); }
+
+  openDemandeForm() { this.showDemandeForm = true; }
+  closeDemandeForm() { this.showDemandeForm = false; this.newColis = this.initColis(); this.newDemande = this.initDemande(); }
+
+  // 💾 SAVE: Colis seul
+  saveColis() {
     this.colisService.create(this.newColis).subscribe({
       next: colis => {
         this.colisList.push(colis);
         this.closeColisForm();
       },
-      error: err => {
-        console.error('Erreur:', err);
-      }
+      error: err => console.error('Erreur colis:', err)
     });
   }
 
-
-  deleteColis(id: number) {
-    this.colisService.delete(id).subscribe(() => {
-      this.colisList = this.colisList.filter(c => c.id !== id);
-    });
-  }
-
-  // Demande
-  openDemandeForm() { this.showDemandeForm = true; }
-  closeDemandeForm() {
-    this.showDemandeForm = false;
-    this.newDemande = {
-      status: '',
-      date: '',
-      colisId: 0,
-      trajetId: 0,
-      expediteurId: 1
-    };
-  }
-
-  saveDemande() {
-    this.demandeService.create(this.newDemande).subscribe(demande => {
-      this.demandesList.push(demande);
-      this.closeDemandeForm();
-    });
-  }
-
-  deleteDemande(id: number) {
-    this.demandeService.delete(id).subscribe(() => {
-      this.demandesList = this.demandesList.filter(d => d.id !== id);
-    });
-  }
-
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'ACCEPTEE': return 'text-green-600';
-      case 'REFUSEE': return 'text-red-500';
-      default: return 'text-yellow-500';
-    }
-  }
-
-
+  // 💾 SAVE: Demande + Colis ensemble
   saveDemandeWithColis() {
     const payload = {
       trajetId: this.newDemande.trajetId,
@@ -150,14 +97,30 @@ export class ExpediteurDashboardComponent implements OnInit {
         this.demandesList.push(demande);
         this.closeDemandeForm();
       },
-      error: (err) => {
-        console.error('Erreur:', err);
-      }
+      error: (err) => console.error('Erreur demande avec colis:', err)
     });
   }
 
+  // ❌ DELETE
+  deleteColis(id: number) {
+    this.colisService.delete(id).subscribe(() => {
+      this.colisList = this.colisList.filter(c => c.id !== id);
+    });
+  }
 
+  deleteDemande(id: number) {
+    this.demandeService.delete(id).subscribe(() => {
+      this.demandesList = this.demandesList.filter(d => d.id !== id);
+    });
+  }
 
-
-
+  // 🎨 UI
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'ACCEPTEE': return 'text-green-600';
+      case 'REFUSEE': return 'text-red-600';
+      case 'EN_ATTENTE': return 'text-yellow-500';
+      default: return 'text-gray-500';
+    }
+  }
 }
