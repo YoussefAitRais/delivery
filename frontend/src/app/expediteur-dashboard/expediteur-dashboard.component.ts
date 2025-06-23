@@ -34,7 +34,6 @@ export class ExpediteurDashboardComponent implements OnInit {
     this.demandeService.getByExpediteur(1).subscribe(data => this.demandesList = data);
   }
 
-  // Helpers init
   initColis() {
     return {
       destination: '',
@@ -65,7 +64,6 @@ export class ExpediteurDashboardComponent implements OnInit {
   openDemandeForm() { this.showDemandeForm = true; }
   closeDemandeForm() { this.showDemandeForm = false; this.newColis = this.initColis(); this.newDemande = this.initDemande(); }
 
-  // 💾 SAVE: Colis seul
   saveColis() {
     this.colisService.create(this.newColis).subscribe({
       next: colis => {
@@ -76,7 +74,6 @@ export class ExpediteurDashboardComponent implements OnInit {
     });
   }
 
-  // 💾 SAVE: Demande + Colis ensemble
   saveDemandeWithColis() {
     const payload = {
       trajetId: this.newDemande.trajetId,
@@ -101,7 +98,6 @@ export class ExpediteurDashboardComponent implements OnInit {
     });
   }
 
-  // ❌ DELETE
   deleteColis(id: number) {
     this.colisService.delete(id).subscribe(() => {
       this.colisList = this.colisList.filter(c => c.id !== id);
@@ -114,7 +110,6 @@ export class ExpediteurDashboardComponent implements OnInit {
     });
   }
 
-  // 🎨 UI
   getStatusColor(status: string): string {
     switch (status) {
       case 'ACCEPTEE': return 'text-green-600';
